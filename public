@@ -1,3 +1,84 @@
-[build]
-  publish = "public"  
-  command = ""
+content: ["./src/**/*.{js,jsx,ts,tsx}"],
+theme: { extend: {} },
+plugins: [],
+newfundloan/
+├── index.html       
+├── style.css         
+├── script.js         
+└── package.json      
+├── public/
+│   └── logo.png              # NewFund лого
+├── src/
+│   ├── app/
+│   │   ├── page.js           # Нүүр хуудас
+│   │   ├── login/page.js     # Нэвтрэх
+│   │   ├── signup/page.js    # Бүртгүүлэх
+│   │   ├── loan/page.js      # Зээлийн хүсэлтийн form
+│   │   └── globals.css       # Tailwind үндсэн CSS
+│   └── firebase.js           # Firebase тохиргоо (demo)
+├── .env.local.example        # Firebase config variables
+├── package.json
+└── tailwind.config.js
+:root {
+  --primary-color: #FF6F00; /* Улбар шар */
+  --secondary-color: #4CAF50; /* Ногоон */
+}
+
+body {
+  background-color: var(--primary-color);
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+button, a.button {
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+button:hover, a.button:hover {
+  opacity: 0.9;
+}
+npm install tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+"use client";
+import { useState } from "react";
+import { db } from "@/firebase";
+import { collection, addDoc } from "firebase/firestore";
+
+export default function LoanForm() {
+  const [form, setForm] = useState({ amount: "", term: "", income: "", reg: "", phone: "" });
+  const [sent, setSent] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await addDoc(collection(db, "loan_requests"), form);
+    setSent(true);
+  };
+
+  return (
+    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-2xl shadow">
+      <h2 className="text-2xl font-bold text-center text-[#009444] mb-6">Зээлийн хүсэлт илгээх</h2>
+      {sent ? (
+        <p className="text-center text-green-600 font-medium">✅ Таны хүсэлтийг хүлээн авлаа!</p>
+      ) : (
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input placeholder="Зээлийн дүн (₮)" className="w-full border p-2 rounded" required
+            onChange={e => setForm({ ...form, amount: e.target.value })} />
+          <input placeholder="Хугацаа (сар)" className="w-full border p-2 rounded" required
+            onChange={e => setForm({ ...form, term: e.target.value })} />
+          <input placeholder="Орлого (₮)" className="w-full border p-2 rounded"
+            onChange={e => setForm({ ...form, income: e.target.value })} />
+          <input placeholder="Регистрийн дугаар" className="w-full border p-2 rounded"
+            onChange={e => setForm({ ...form, reg: e.target.value })} />
+          <input placeholder="Утасны дугаар" className="w-full border p-2 rounded"
+            onChange={e => setForm({ ...form, phone: e.target.value })} />
+          <button className="w-full bg-[#F68B1E] text-white py-2 rounded font-medium">Илгээх</button>
+        </form>
+      )}
+    </div>
+  );
+}
