@@ -1,4 +1,8 @@
 newfundloan/
+├── index.html       
+├── style.css         
+├── script.js         
+└── package.json      
 ├── public/
 │   └── logo.png              # NewFund лого
 ├── src/
