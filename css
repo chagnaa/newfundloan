@@ -1,0 +1,23 @@
+:root {
+  --primary-color: #FF6F00; /* Улбар шар */
+  --secondary-color: #4CAF50; /* Ногоон */
+}
+
+body {
+  background-color: var(--primary-color);
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+button, a.button {
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+button:hover, a.button:hover {
+  opacity: 0.9;
+}
